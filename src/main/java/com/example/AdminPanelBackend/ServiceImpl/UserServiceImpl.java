@@ -5,10 +5,13 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.AdminPanelBackend.Entity.User;
 import com.example.AdminPanelBackend.Exception.ResourceNotFoundException;
+import com.example.AdminPanelBackend.Repository.CustomHQLRepositoryImpl;
 import com.example.AdminPanelBackend.Repository.UserRepository;
 import com.example.AdminPanelBackend.Service.UserService;
 
@@ -16,8 +19,12 @@ import com.example.AdminPanelBackend.Service.UserService;
 public class UserServiceImpl implements UserService {
 
 	private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
+	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private CustomHQLRepositoryImpl customRepo;
 
 
 	@Override
@@ -54,6 +61,7 @@ public class UserServiceImpl implements UserService {
 	public User updateUserService(int id, User user) throws ResourceNotFoundException {
 		User opUser = userRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Employee not found for this id :: " + id));
+		opUser.setId(id);
 		opUser.setName(user.getName());
 		opUser.setContact(user.getName());
 		opUser.setEmail(user.getEmail());
@@ -72,5 +80,18 @@ public class UserServiceImpl implements UserService {
 				orElseThrow(()->new ResourceNotFoundException("Employee not found for this id :: " + id));
 			userRepository.delete(user);
 	}
+
+	@Override
+	public Page<User> userPageCount(Pageable pageable) {
+		// TODO Auto-generated method stub
+		return userRepository.findAll(pageable);
+	}
+
+//	getTopUserForDashboard
+	@Override
+	public List<User> getAllUserByIdDesc() {
+		return customRepo.findAllUserByIdDesc();
+	}
+	
 
 }
