@@ -2,6 +2,9 @@ package com.example.AdminPanelBackend.Service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.example.AdminPanelBackend.Entity.User;
 import com.example.AdminPanelBackend.Exception.ResourceNotFoundException;
 
@@ -22,5 +25,10 @@ public interface UserService {
 	
 	//delete
 	public void deleteUserService(int id)throws ResourceNotFoundException;
+	
+	//getAllpage Count
+	public  Page<User> userPageCount(Pageable pageable);
+	
+	public List<User> getAllUserByIdDesc();
 
 }
